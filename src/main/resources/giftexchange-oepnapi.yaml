@@ -1,0 +1,156 @@
+openapi: 3.0.0
+info:
+  title: GiftExchange API
+  description: giftexchange api to manage family members and gift exchange among family members.
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+
+
+tags:
+  - name : Family members
+    description : manage family members
+  - name : Gift Exchange
+    description: Get gift exchange details and shuffle gift exchange
+
+paths:
+  /members:
+    get:
+      summary: Get list of family members
+      tags:
+        - Family Members
+      responses:
+        '200':    # status code
+          description: A JSON array of family members
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Member'
+    post:
+      summary: Create a new family member
+      tags:
+        - Family Members
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Member'
+      responses:
+        '201': # status code
+          description: Created a family member
+  /members/{id}:
+    get:
+      summary: Get a family member by id
+      tags:
+        - Family Members
+      parameters:
+        - name: id
+          description: Member Id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200': # status code
+          description: Family member details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Member'
+    put:
+      summary: Get a family member by id
+      tags:
+        - Family Members
+      parameters:
+        - name: id
+          description: Member Id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Member'
+
+
+      responses:
+        '200': # status code
+          description: Updated a family member
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Member'
+    delete:
+      summary: deletes a family member by id
+      tags:
+        - Family Members
+      parameters:
+        - name: id
+          description: Member Id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204': # status code
+          description: The specified family member is deleted
+
+  /gift_exchange:
+    get:
+      summary: Get most recent gift exchange
+      tags:
+        - Gift Exchange
+      responses:
+        '200': # status code
+          description: A JSON array of gift exchange
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GiftExchange'
+
+  /gift_exchange/shuffle:
+    post:
+      summary: Shuffle the gift exchange
+      tags:
+        - Gift Exchange
+      responses:
+        '200':
+          description: returns shuffled results
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GiftExchange'
+
+components:
+  schemas:
+    Member:
+      type: object
+      properties:
+        id:
+          type: string
+          example: member1
+        name:
+          type: string
+          example: Sekhar
+      required:
+        - id
+        - name
+    GiftExchange:
+      type: object
+      properties:
+        giverId:
+          type: string
+          example: member1
+        receiverId:
+          type: string
+          example: member2
